@@ -1,0 +1,157 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background: #121214;
+  color: #e1e1e6;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+header {
+  background: #18181c;
+  padding: 12px 20px;
+  border-bottom: 1px solid #2d2d38;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+h1 {
+  font-size: 1.1rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+.container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 340px;
+  background: #18181c;
+  border-right: 1px solid #2d2d38;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.panel {
+  background: #202026;
+  border: 1px solid #2d2d38;
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.panel h2 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #a0a0b0;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+}
+
+label {
+  font-size: 0.8rem;
+  color: #ccc;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+input,
+select,
+textarea,
+button {
+  background: #2a2a32;
+  border: 1px solid #3d3d4a;
+  color: #fff;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  outline: none;
+  width: 100%;
+}
+
+input[type="range"] {
+  padding: 0;
+  cursor: pointer;
+}
+
+input[type="color"] {
+  height: 36px;
+  padding: 2px;
+  cursor: pointer;
+}
+
+button {
+  background: #4f46e5;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #4338ca;
+}
+
+button.btn-danger {
+  background: #dc2626;
+}
+
+button.btn-danger:hover {
+  background: #b91c1c;
+}
+
+button.btn-secondary {
+  background: #374151;
+}
+
+button.btn-secondary:hover {
+  background: #4b5563;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.row > * {
+  flex: 1;
+  min-width: 0;
+}
+
+.preview-area {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #09090b;
+  padding: 20px;
+  position: relative;
+  user-select: none;
+}
+
+canvas {
+  max-width: 95%;
+  max-height: 95%;
+  background: #000;
+  border: 1px solid #333;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  cursor: move;
+}

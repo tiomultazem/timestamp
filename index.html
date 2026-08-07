@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Twibbon Timestamp Generator</title>
+  <script src="https://cdn.jsdelivr.net/npm/exifr/dist/full.umd.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background: #121214; color: #e1e1e6; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+    header { background: #18181c; padding: 12px 20px; border-bottom: 1px solid #2d2d38; display: flex; justify-content: space-between; align-items: center; }
+    h1 { font-size: 1.1rem; color: #fff; font-weight: 600; }
+    .container { display: flex; flex: 1; overflow: hidden; }
+    .sidebar { width: 320px; background: #18181c; border-right: 1px solid #2d2d38; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+    .panel { background: #202026; border: 1px solid #2d2d38; border-radius: 6px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+    .panel h2 { font-size: 0.8rem; text-transform: uppercase; color: #a0a0b0; letter-spacing: 0.5px; font-weight: 700; }
+    label { font-size: 0.8rem; color: #ccc; display: flex; flex-direction: column; gap: 4px; }
+    input, select, button { background: #2a2a32; border: 1px solid #3d3d4a; color: #fff; padding: 8px; border-radius: 4px; font-size: 0.85rem; outline: none; }
+    input[type="range"] { padding: 0; cursor: pointer; }
+    input[type="color"] { height: 36px; padding: 2px; cursor: pointer; }
+    button { background: #4f46e5; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; }
+    button:hover { background: #4338ca; }
+    .row { display: flex; gap: 8px; align-items: center; }
+    .row > * { flex: 1; }
+    .preview-area { flex: 1; display: flex; justify-content: center; align-items: center; background: #09090b; padding: 20px; position: relative; user-select: none; }
+    canvas { max-width: 95%; max-height: 95%; background: #000; border: 1px solid #333; box-shadow: 0 10px 25px rgba(0,0,0,0.5); cursor: move; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Twibbon Timestamp Generator</h1>
+    <button id="btnDownload">Unduh Foto</button>
+  </header>
+  <div class="container">
+    <div class="sidebar">
+      <div class="panel">
+        <h2>1. Upload Foto</h2>
+        <input type="file" id="inputImage" accept="image/*">
+      </div>
+      
+      <div class="panel">
+        <h2>2. Ukuran Frame Canvas</h2>
+        <label>Rasio Frame
+          <select id="selectAspect">
+            <option value="1:1">1 : 1 (Square)</option>
+            <option value="4:5">4 : 5 (Instagram Post)</option>
+            <option value="16:9">16 : 9 (Landscape)</option>
+            <option value="custom">Custom</option>
+          </select>
+        </label>
+        <div class="row" id="customDims" style="display:none;">
+          <label>Lebar (px) <input type="number" id="canvasW" value="1080"></label>
+          <label>Tinggi (px) <input type="number" id="canvasH" value="1080"></label>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>3. Kontrol Foto</h2>
+        <label>Zoom Foto
+          <input type="range" id="photoScale" min="0.1" max="3" step="0.01" value="1">
+        </label>
+        <button id="btnResetPhoto">Reset Posisi & Zoom</button>
+      </div>
+
+      <div class="panel">
+        <h2>4. Teks Timestamp / Custom</h2>
+        <label>Status Teks
+          <select id="selectTextMode">
+            <option value="show">Tampilkan Teks</option>
+            <option value="hide">Hapus / Sembunyikan Teks</option>
+          </select>
+        </label>
+        <label>Isi Teks
+          <input type="text" id="textValue" placeholder="Upload foto untuk EXIF...">
+        </label>
+        <div class="row">
+          <label>Ukuran Font <input type="number" id="textSize" value="36" min="10" max="200"></label>
+          <label>Warna Teks <input type="color" id="textColor" value="#ffffff"></label>
+        </div>
+        <div class="row">
+          <label>Background Teks <input type="color" id="textBgColor" value="#000000"></label>
+          <label>Transparansi BG <input type="range" id="textBgAlpha" min="0" max="1" step="0.05" value="0.5"></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="preview-area">
+      <canvas id="mainCanvas"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('mainCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    let img = null;
+    let canvasWidth = 1080;
+    let canvasHeight = 1080;
+    
+    let photoX = 0;
+    let photoY = 0;
+    let photoScale = 1;
+    
+    let showText = true;
+    let textContent = '';
+    let textX = 40;
+    let textY = 40;
+    let fontSize = 36;
+    let textColor = '#ffffff';
+    let textBgColor = '#000000';
+    let textBgAlpha = 0.5;
+
+    let isDragging = false;
+    let dragTarget = null;
+    let startX, startY;
+
+    const inputImage = document.getElementById('inputImage');
+    const selectAspect = document.getElementById('selectAspect');
+    const customDims = document.getElementById('customDims');
+    const canvasWInput = document.getElementById('canvasW');
+    const canvasHInput = document.getElementById('canvasH');
+    const photoScaleInput = document.getElementById('photoScale');
+    const btnResetPhoto = document.getElementById('btnResetPhoto');
+    const selectTextMode = document.getElementById('selectTextMode');
+    const textValueInput = document.getElementById('textValue');
+    const textSizeInput = document.getElementById('textSize');
+    const textColorInput = document.getElementById('textColor');
+    const textBgColorInput = document.getElementById('textBgColor');
+    const textBgAlphaInput = document.getElementById('textBgAlpha');
+    const btnDownload = document.getElementById('btnDownload');
+
+    function setCanvasSize(w, h) {
+      canvasWidth = w;
+      canvasHeight = h;
+      canvas.width = w;
+      canvas.height = h;
+      if (!textY || textY === 40) {
+        textY = canvasHeight - 60;
+      }
+      render();
+    }
+
+    setCanvasSize(1080, 1080);
+
+    selectAspect.addEventListener('change', () => {
+      const val = selectAspect.value;
+      if (val === '1:1') { customDims.style.display = 'none'; setCanvasSize(1080, 1080); }
+      else if (val === '4:5') { customDims.style.display = 'none'; setCanvasSize(1080, 1350); }
+      else if (val === '16:9') { customDims.style.display = 'none'; setCanvasSize(1920, 1080); }
+      else {
+        customDims.style.display = 'flex';
+        setCanvasSize(parseInt(canvasWInput.value) || 1080, parseInt(canvasHInput.value) || 1080);
+      }
+    });
+
+    [canvasWInput, canvasHInput].forEach(inp => {
+      inp.addEventListener('input', () => {
+        if (selectAspect.value === 'custom') {
+          setCanvasSize(parseInt(canvasWInput.value) || 1080, parseInt(canvasHInput.value) || 1080);
+        }
+      });
+    });
+
+    inputImage.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      let dateStr = '';
+      try {
+        if (window.exifr) {
+          const exif = await exifr.parse(file, ['DateTimeOriginal', 'CreateDate']);
+          const dt = exif?.DateTimeOriginal || exif?.CreateDate;
+          if (dt) {
+            dateStr = formatDate(new Date(dt));
+          }
+        }
+      } catch (err) {
+        console.warn('EXIF read error:', err);
+      }
+
+      if (!dateStr) {
+        const d = file.lastModified ? new Date(file.lastModified) : new Date();
+        dateStr = formatDate(d);
+      }
+
+      textContent = dateStr;
+      textValueInput.value = textContent;
+
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        img = new Image();
+        img.onload = () => {
+          const scaleW = canvasWidth / img.width;
+          const scaleH = canvasHeight / img.height;
+          photoScale = Math.max(scaleW, scaleH);
+          photoScaleInput.value = photoScale;
+          photoX = (canvasWidth - img.width * photoScale) / 2;
+          photoY = (canvasHeight - img.height * photoScale) / 2;
+          textX = 40;
+          textY = canvasHeight - 60;
+          render();
+        };
+        img.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function formatDate(d) {
+      const pad = n => String(n).padStart(2, '0');
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
+
+    photoScaleInput.addEventListener('input', () => {
+      photoScale = parseFloat(photoScaleInput.value);
+      render();
+    });
+
+    btnResetPhoto.addEventListener('click', () => {
+      if (!img) return;
+      const scaleW = canvasWidth / img.width;
+      const scaleH = canvasHeight / img.height;
+      photoScale = Math.max(scaleW, scaleH);
+      photoScaleInput.value = photoScale;
+      photoX = (canvasWidth - img.width * photoScale) / 2;
+      photoY = (canvasHeight - img.height * photoScale) / 2;
+      render();
+    });
+
+    selectTextMode.addEventListener('change', () => {
+      showText = selectTextMode.value === 'show';
+      render();
+    });
+
+    textValueInput.addEventListener('input', () => { textContent = textValueInput.value; render(); });
+    textSizeInput.addEventListener('input', () => { fontSize = parseInt(textSizeInput.value) || 36; render(); });
+    textColorInput.addEventListener('input', () => { textColor = textColorInput.value; render(); });
+    textBgColorInput.addEventListener('input', () => { textBgColor = textBgColorInput.value; render(); });
+    textBgAlphaInput.addEventListener('input', () => { textBgAlpha = parseFloat(textBgAlphaInput.value); render(); });
+
+    function render() {
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+      if (img) {
+        ctx.drawImage(img, photoX, photoY, img.width * photoScale, img.height * photoScale);
+      } else {
+        ctx.fillStyle = '#1a1a20';
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+        ctx.fillStyle = '#666';
+        ctx.font = '24px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Upload Foto untuk Memulai', canvasWidth / 2, canvasHeight / 2);
+      }
+
+      if (showText && textContent) {
+        ctx.font = `${fontSize}px monospace, sans-serif`;
+        ctx.textBaseline = 'top';
+        const metrics = ctx.measureText(textContent);
+        const textW = metrics.width;
+        const textH = fontSize * 1.2;
+        const padding = fontSize * 0.3;
+
+        if (textBgAlpha > 0) {
+          ctx.save();
+          ctx.globalAlpha = textBgAlpha;
+          ctx.fillStyle = textBgColor;
+          ctx.fillRect(textX - padding, textY - padding, textW + padding * 2, textH + padding * 2);
+          ctx.restore();
+        }
+
+        ctx.fillStyle = textColor;
+        ctx.fillText(textContent, textX, textY);
+      }
+    }
+
+    function getCanvasCoordinates(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      const scaleX = canvasWidth / rect.width;
+      const scaleY = canvasHeight / rect.height;
+      return {
+        x: (clientX - rect.left) * scaleX,
+        y: (clientY - rect.top) * scaleY
+      };
+    }
+
+    function onPointerDown(e) {
+      const pos = getCanvasCoordinates(e);
+      startX = pos.x;
+      startY = pos.y;
+
+      if (showText && textContent) {
+        ctx.font = `${fontSize}px monospace, sans-serif`;
+        const textW = ctx.measureText(textContent).width;
+        const textH = fontSize * 1.2;
+        if (pos.x >= textX - 20 && pos.x <= textX + textW + 20 &&
+            pos.y >= textY - 20 && pos.y <= textY + textH + 20) {
+          dragTarget = 'text';
+          isDragging = true;
+          return;
+        }
+      }
+
+      if (img) {
+        dragTarget = 'photo';
+        isDragging = true;
+      }
+    }
+
+    function onPointerMove(e) {
+      if (!isDragging) return;
+      const pos = getCanvasCoordinates(e);
+      const dx = pos.x - startX;
+      const dy = pos.y - startY;
+      startX = pos.x;
+      startY = pos.y;
+
+      if (dragTarget === 'photo') {
+        photoX += dx;
+        photoY += dy;
+      } else if (dragTarget === 'text') {
+        textX += dx;
+        textY += dy;
+      }
+      render();
+    }
+
+    function onPointerUp() {
+      isDragging = false;
+      dragTarget = null;
+    }
+
+    canvas.addEventListener('mousedown', onPointerDown);
+    window.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('mouseup', onPointerUp);
+
+    canvas.addEventListener('touchstart', onPointerDown, { passive: true });
+    window.addEventListener('touchmove', onPointerMove, { passive: true });
+    window.addEventListener('touchend', onPointerUp);
+
+    btnDownload.addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = 'twibbon-timestamp.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  </script>
+</body>
+</html>

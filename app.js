@@ -323,7 +323,7 @@ function onPointerDown(e) {
     const totalH = lines.length * layer.size * 1.25;
 
     if (pos.x >= layer.x - 20 && pos.x <= layer.x + maxW + 20 &&
-        pos.y >= layer.y - 20 && pos.y <= layer.y + totalH + 20) {
+      pos.y >= layer.y - 20 && pos.y <= layer.y + totalH + 20) {
       activeLayerIndex = i;
       dragTarget = i;
       isDragging = true;
@@ -386,8 +386,11 @@ window.addEventListener('touchmove', onPointerMove, { passive: true });
 window.addEventListener('touchend', onPointerUp);
 
 btnDownload.addEventListener('click', () => {
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const timeStampStr = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
   const link = document.createElement('a');
-  link.download = 'twibbon-timestamp.png';
+  link.download = `timestamp-helper_${timeStampStr}.png`;
   link.href = canvas.toDataURL('image/png');
   link.click();
 });

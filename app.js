@@ -241,12 +241,15 @@ function render() {
   if (img) {
     ctx.drawImage(img, photoX, photoY, img.width * photoScale, img.height * photoScale);
   } else {
+    ctx.save();
     ctx.fillStyle = '#1a1a20';
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     ctx.fillStyle = '#666';
     ctx.font = '24px sans-serif';
     ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
     ctx.fillText('Upload Foto untuk Memulai', canvasWidth / 2, canvasHeight / 2);
+    ctx.restore();
   }
 
   textLayers.forEach((layer, idx) => {
@@ -256,7 +259,9 @@ function render() {
     const fontSize = layer.size;
     const lineHeight = fontSize * 1.25;
 
+    ctx.save();
     ctx.font = `${fontSize}px monospace, sans-serif`;
+    ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
 
     let maxLineWidth = 0;
@@ -282,13 +287,12 @@ function render() {
     });
 
     if (idx === activeLayerIndex) {
-      ctx.save();
       ctx.strokeStyle = '#4f46e5';
       ctx.lineWidth = 2;
       ctx.setLineDash([6, 4]);
       ctx.strokeRect(layer.x - padding - 4, layer.y - padding - 4, maxLineWidth + padding * 2 + 8, totalHeight + padding * 2 + 8);
-      ctx.restore();
     }
+    ctx.restore();
   });
 }
 

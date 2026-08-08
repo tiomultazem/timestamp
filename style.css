@@ -5,6 +5,7 @@
   --bg-panel: #202026;
   --bg-input: #2a2a32;
   --bg-preview: #050508;
+  --grid-dot: #3d3d4a;
   --border-color: #2d2d38;
   --border-input: #3d3d4a;
   --text-main: #e1e1e6;
@@ -21,8 +22,9 @@ body.light-theme {
   --bg-sidebar: #ffffff;
   --bg-panel: #f1f5f9;
   --bg-input: #ffffff;
-  --bg-preview: #cbd5e1;
-  --border-color: #e2e8f0;
+  --bg-preview: #e2e8f0;
+  --grid-dot: #94a3b8;
+  --border-color: #cbd5e1;
   --border-input: #cbd5e1;
   --text-main: #1e293b;
   --text-title: #0f172a;
@@ -197,7 +199,7 @@ button.btn-secondary:hover {
   justify-content: center;
   align-items: center;
   background-color: var(--bg-preview);
-  background-image: radial-gradient(var(--border-input) 1.5px, transparent 1.5px);
+  background-image: radial-gradient(var(--grid-dot) 1.5px, transparent 1.5px);
   background-size: 24px 24px;
   padding: 24px;
   position: relative;

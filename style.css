@@ -1,3 +1,37 @@
+:root {
+  --bg-main: #121214;
+  --bg-header: #18181c;
+  --bg-sidebar: #18181c;
+  --bg-panel: #202026;
+  --bg-input: #2a2a32;
+  --bg-preview: #050508;
+  --border-color: #2d2d38;
+  --border-input: #3d3d4a;
+  --text-main: #e1e1e6;
+  --text-title: #ffffff;
+  --text-muted: #a0a0b0;
+  --label-color: #ccc;
+  --canvas-border: #6366f1;
+  --canvas-shadow: 0 0 0 3px #4f46e5, 0 16px 40px rgba(0, 0, 0, 0.8);
+}
+
+body.light-theme {
+  --bg-main: #f8fafc;
+  --bg-header: #ffffff;
+  --bg-sidebar: #ffffff;
+  --bg-panel: #f1f5f9;
+  --bg-input: #ffffff;
+  --bg-preview: #cbd5e1;
+  --border-color: #e2e8f0;
+  --border-input: #cbd5e1;
+  --text-main: #1e293b;
+  --text-title: #0f172a;
+  --text-muted: #64748b;
+  --label-color: #475569;
+  --canvas-border: #4f46e5;
+  --canvas-shadow: 0 0 0 3px #4f46e5, 0 16px 40px rgba(0, 0, 0, 0.15);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -6,26 +40,33 @@
 }
 
 body {
-  background: #121214;
-  color: #e1e1e6;
+  background: var(--bg-main);
+  color: var(--text-main);
   display: flex;
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+  transition: background 0.25s, color 0.25s;
 }
 
 header {
-  background: #18181c;
+  background: var(--bg-header);
   padding: 12px 20px;
-  border-bottom: 1px solid #2d2d38;
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  transition: background 0.25s, border-color 0.25s;
+}
+
+.header-actions {
+  display: flex;
   align-items: center;
 }
 
 h1 {
   font-size: 1.4rem;
-  color: #fff;
+  color: var(--text-title);
   font-weight: 700;
 }
 
@@ -33,7 +74,7 @@ h1 {
   margin-top: auto;
   padding: 12px 0 4px;
   font-size: 0.75rem;
-  color: #71717a;
+  color: var(--text-muted);
   text-align: center;
 }
 
@@ -45,36 +86,38 @@ h1 {
 
 .sidebar {
   width: 340px;
-  background: #18181c;
-  border-right: 1px solid #2d2d38;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
   padding: 16px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  transition: background 0.25s, border-color 0.25s;
 }
 
 .panel {
-  background: #202026;
-  border: 1px solid #2d2d38;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  transition: background 0.25s, border-color 0.25s;
 }
 
 .panel h2 {
   font-size: 0.8rem;
   text-transform: uppercase;
-  color: #a0a0b0;
+  color: var(--text-muted);
   letter-spacing: 0.5px;
   font-weight: 700;
 }
 
 label {
   font-size: 0.8rem;
-  color: #ccc;
+  color: var(--label-color);
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -84,9 +127,9 @@ input,
 select,
 textarea,
 button {
-  background: #2a2a32;
-  border: 1px solid #3d3d4a;
-  color: #fff;
+  background: var(--bg-input);
+  border: 1px solid var(--border-input);
+  color: var(--text-main);
   padding: 8px;
   border-radius: 4px;
   font-size: 0.85rem;
@@ -108,6 +151,7 @@ input[type="color"] {
 button {
   background: #4f46e5;
   border: none;
+  color: #ffffff;
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
@@ -119,6 +163,7 @@ button:hover {
 
 button.btn-danger {
   background: #dc2626;
+  color: #ffffff;
 }
 
 button.btn-danger:hover {
@@ -126,11 +171,13 @@ button.btn-danger:hover {
 }
 
 button.btn-secondary {
-  background: #374151;
+  background: var(--bg-input);
+  border: 1px solid var(--border-input);
+  color: var(--text-main);
 }
 
 button.btn-secondary:hover {
-  background: #4b5563;
+  filter: brightness(0.9);
 }
 
 .row {
@@ -149,17 +196,21 @@ button.btn-secondary:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #09090b;
-  padding: 20px;
+  background-color: var(--bg-preview);
+  background-image: radial-gradient(var(--border-input) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+  padding: 24px;
   position: relative;
   user-select: none;
+  transition: background-color 0.25s;
 }
 
 canvas {
   max-width: 95%;
   max-height: 95%;
   background: #000;
-  border: 1px solid #333;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  border: 3px solid var(--canvas-border);
+  box-shadow: var(--canvas-shadow);
   cursor: move;
+  border-radius: 4px;
 }

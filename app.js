@@ -46,6 +46,28 @@ const textColorInput = document.getElementById('textColor');
 const textBgColorInput = document.getElementById('textBgColor');
 const textBgAlphaInput = document.getElementById('textBgAlpha');
 const btnDownload = document.getElementById('btnDownload');
+const btnThemeToggle = document.getElementById('btnThemeToggle');
+
+function initTheme() {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-theme');
+    if (btnThemeToggle) btnThemeToggle.textContent = '☀️ Light';
+  } else {
+    document.body.classList.remove('light-theme');
+    if (btnThemeToggle) btnThemeToggle.textContent = '🌙 Dark';
+  }
+}
+
+if (btnThemeToggle) {
+  btnThemeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('light-theme');
+    const isLight = document.body.classList.contains('light-theme');
+    btnThemeToggle.textContent = isLight ? '☀️ Light' : '🌙 Dark';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  });
+}
+initTheme();
 
 function updateLayerUI() {
   selectLayer.innerHTML = '';

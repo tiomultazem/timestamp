@@ -65,6 +65,7 @@ if (btnThemeToggle) {
     const isLight = document.body.classList.contains('light-theme');
     btnThemeToggle.textContent = isLight ? '☀️ Light' : '🌙 Dark';
     localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    render();
   });
 }
 initTheme();
@@ -260,13 +261,21 @@ textBgAlphaInput.addEventListener('input', () => {
 function render() {
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
+  const isLightTheme = document.body.classList.contains('light-theme');
+  const canvasBgColor = isLightTheme ? '#ffffff' : '#1a1a20';
+  const placeholderColor = isLightTheme ? '#64748b' : '#94a3b8';
+
+  // Fill canvas blank space background
+  ctx.save();
+  ctx.fillStyle = canvasBgColor;
+  ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+  ctx.restore();
+
   if (img) {
     ctx.drawImage(img, photoX, photoY, img.width * photoScale, img.height * photoScale);
   } else {
     ctx.save();
-    ctx.fillStyle = '#1a1a20';
-    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-    ctx.fillStyle = '#666';
+    ctx.fillStyle = placeholderColor;
     ctx.font = '24px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';

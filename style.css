@@ -205,6 +205,36 @@ button.btn-secondary:hover {
   transition: background-color 0.25s;
 }
 
+.canvas-hint {
+  position: absolute;
+  top: 16px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+
+.guide-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.guide-list li strong {
+  color: var(--text-main);
+}
+
 canvas {
   max-width: 95%;
   max-height: 95%;

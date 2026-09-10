@@ -13,7 +13,7 @@ Aplikasi web sederhana untuk menambahkan timestamp (waktu pengambilan foto) dan 
 - **Auto EXIF Metadata** — Otomatis membaca tanggal dan waktu pengambilan foto dari metadata EXIF file foto.
 - **Multi-Layer Teks & Kustomisasi** — Mendukung hingga 10 layer teks bebas (multi-line, atur warna font, ukuran font, dan transparansi background teks).
 - **Interaktif Drag & Zoom** — Geser posisi foto/teks langsung pada canvas dan sesuaikan zoom dengan scroll mouse.
-- **Bisa Deploy Sendiri** — Bebas dideploy langsung ke hosting milikmu sendiri (GitHub Pages, Netlify, Vercel, Nginx, Apache, dll).
+- **Bisa Deploy Sendiri** — Bebas dideploy langsung ke hosting milikmu sendiri kalo pengen.
 
 ---
 
@@ -26,9 +26,9 @@ Aplikasi web sederhana untuk menambahkan timestamp (waktu pengambilan foto) dan 
 
 ---
 
-## 🛠️ Deployment
+## 🛠️ Self-Hosting / Deployment
 
-Aplikasi ini terdiri dari berkas statis (`index.html`, `style.css`, `app.js`). Cukup unggah seluruh berkas project ke hosting web statis mana pun tanpa perlu backend atau database.
+Mo self-host sendiri? Tinggal unggah seluruh berkas project ini ke hostingan web statis mana pun tanpa perlu backend atau database.
 
 ---
 

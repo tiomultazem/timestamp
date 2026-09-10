@@ -1,6 +1,6 @@
 # Timestamp Helper 📸
 
-Aplikasi web sederhana untuk menambahkan timestamp (waktu pengambilan foto) dan watermark teks kustom pada foto secara instan.
+Aplikasi web sederhana untuk nambahin timestamp dan watermark kustom pada foto.
 
 📍 **Akses Web / Live Demo:** [tiomultazem.github.io/timestamp](https://tiomultazem.github.io/timestamp)
 
@@ -19,7 +19,7 @@ Aplikasi web sederhana untuk menambahkan timestamp (waktu pengambilan foto) dan 
 
 ## 🚀 Cara Penggunaan
 
-1. Buka [tiomultazem.github.io/timestamp](https://tiomultazem.github.io/timestamp) atau buka file `index.html` secara lokal.
+1. Buka [tiomultazem.github.io/timestamp](https://tiomultazem.github.io/timestamp).
 2. Unggah foto yang hendak diberi timestamp.
 3. Atur posisi foto, rasio canvas, serta kustomisasi teks timestamp/watermark.
 4. Klik tombol **Unduh Foto** untuk mengunduh gambar hasil olahan.

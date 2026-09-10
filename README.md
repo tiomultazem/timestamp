@@ -32,6 +32,7 @@ Mo self-host sendiri? Tinggal unggah seluruh berkas project ini ke hostingan web
 
 ---
 
-## 📜 Lisensi
+## 📜 Lisensi & Kredit
 
-MIT License
+- **Lisensi:** No Edit (© 2026)
+- **Kredit Logo:** Gilang Wahyu Prasetyo

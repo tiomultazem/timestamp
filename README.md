@@ -6,7 +6,7 @@ Aplikasi web sederhana untuk nambahin timestamp dan watermark kustom pada foto.
 
 ---
 
-## ✨ Fitur Utama
+## Fitur Utama
 
 - **butuh foto bertimestamp? pake ini aja** — Praktis, cepat, dan mudah digunakan langsung dari browser tanpa instalasi aplikasi tambahan.
 - **100% Bekerja Offline (Client-Side)** — Seluruh pemrosesan gambar dan ekstraksi metadata berjalan di browser pengguna. Tidak ada data foto yang terupload ke server.

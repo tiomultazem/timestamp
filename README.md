@@ -2,7 +2,7 @@
 
 Aplikasi web sederhana untuk nambahin timestamp dan watermark kustom pada foto.
 
-📍 **Akses Web / Live Demo:** [tiomultazem.github.io/timestamp](https://tiomultazem.github.io/timestamp)
+**Akses Web:** [tiomultazem.github.io/timestamp](https://tiomultazem.github.io/timestamp)
 
 ---
 

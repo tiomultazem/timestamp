@@ -27,7 +27,7 @@ Aplikasi web sederhana untuk nambahin timestamp dan watermark kustom pada foto.
 
 ---
 
-## 🛠️ Self-Hosting / Deployment
+## Self-Hosting / Deployment
 
 Mo self-host sendiri? Tinggal unggah seluruh berkas project ini ke hostingan web statis mana pun tanpa perlu backend atau database.
 

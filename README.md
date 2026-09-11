@@ -1,7 +1,7 @@
 # Timestamp Helper 📸
 
-- **butuh foto bertimestamp? pake ini aja** — Praktis, cepat, dan mudah digunakan langsung dari browser tanpa instalasi aplikasi tambahan.
-Aplikasi web sederhana untuk nambahin timestamp dan watermark kustom pada foto.
+**butuh foto bertimestamp? pake ini aja** — Aplikasi web sederhana untuk nambahin timestamp dan watermark kustom pada foto. Praktis, cepat, dan mudah digunakan langsung dari browser tanpa instalasi aplikasi tambahan.
+
 
 **Akses Web:** [tiomultazem.github.io/timestamp](https://tiomultazem.github.io/timestamp)
 

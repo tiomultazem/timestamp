@@ -18,7 +18,7 @@ Aplikasi web sederhana untuk nambahin timestamp dan watermark kustom pada foto.
 
 ---
 
-## 🚀 Cara Penggunaan
+## Usage
 
 1. Buka [tiomultazem.github.io/timestamp](https://tiomultazem.github.io/timestamp).
 2. Unggah atau drag & drop foto ke dalam aplikasi.

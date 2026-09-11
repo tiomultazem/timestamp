@@ -129,9 +129,8 @@ selectAspect.addEventListener('change', () => {
   });
 });
 
-inputImage.addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+async function processImageFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
 
   let dateStr = '';
   try {
@@ -170,6 +169,43 @@ inputImage.addEventListener('change', async (e) => {
     img.src = evt.target.result;
   };
   reader.readAsDataURL(file);
+}
+
+inputImage.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file) processImageFile(file);
+});
+
+window.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+});
+
+window.addEventListener('dragenter', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+});
+
+window.addEventListener('drop', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+    processImageFile(e.dataTransfer.files[0]);
+  }
+});
+
+window.addEventListener('paste', (e) => {
+  const items = e.clipboardData && e.clipboardData.items;
+  if (!items) return;
+  for (let item of items) {
+    if (item.type.indexOf('image') !== -1) {
+      const file = item.getAsFile();
+      if (file) {
+        processImageFile(file);
+        break;
+      }
+    }
+  }
 });
 
 function formatDate(d) {

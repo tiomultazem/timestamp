@@ -33,7 +33,7 @@ Mo self-host sendiri? Tinggal unggah seluruh berkas project ini ke hostingan web
 
 ---
 
-## 📜 Lisensi / License
+## Lisensi / License
 
 Timestamp Helper Use-Only License (Copyright © Gilang Wahyu Prasetyo, BPS Kabupaten Tabalong).  
 Detail lisensi selengkapnya dapat dilihat di berkas [LICENSE](LICENSE).
